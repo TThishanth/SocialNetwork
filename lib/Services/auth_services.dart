@@ -17,8 +17,9 @@ class Authentication {
         await googleSignInAccount.authentication;
 
     final AuthCredential authCredential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken);
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
 
     final UserCredential userCredential =
         await _firebaseAuth.signInWithCredential(authCredential);
@@ -72,7 +73,5 @@ class Authentication {
   Future<void> googleSignOut() async {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
-
-    print('User Sign out');
   }
 }

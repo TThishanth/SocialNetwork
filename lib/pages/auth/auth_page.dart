@@ -73,14 +73,14 @@ class _AuthPageState extends State<AuthPage> {
           "profilePhoto": userCredential.user.photoURL ??
               'https://ui-avatars.com/api/?name=$username&background=ff5733&color=fff&length=1',
           "timestamp": timestamp,
+        }).then((_) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
         });
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
       }
     } on PlatformException catch (err) {
       var message = 'An error occured, Please check your credentials.';

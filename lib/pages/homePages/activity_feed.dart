@@ -15,7 +15,7 @@ class ActivityFeed extends StatefulWidget {
 
 class _ActivityFeedState extends State<ActivityFeed> {
   final currentUser = FirebaseAuth.instance.currentUser;
-  
+
   getActivityFeed() async {
     QuerySnapshot snapshot = await activityFeedRef
         .doc(currentUser.uid)
@@ -41,18 +41,16 @@ class _ActivityFeedState extends State<ActivityFeed> {
           backgroundColor: Theme.of(context).primaryColor,
           title: Text('Activity Feed'),
         ),
-        body: Container(
-          child: FutureBuilder(
-            future: getActivityFeed(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return circularProgress();
-              }
-              return ListView(
-                children: snapshot.data,
-              );
-            },
-          ),
+        body: FutureBuilder(
+          future: getActivityFeed(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return circularProgress();
+            }
+            return ListView(
+              children: snapshot.data,
+            );
+          },
         ),
       ),
     );
@@ -85,14 +83,14 @@ class ActivityFeedItem extends StatelessWidget {
 
   factory ActivityFeedItem.fromDocument(DocumentSnapshot doc) {
     return ActivityFeedItem(
-      username: doc['username'],
-      userId: doc['userId'],
-      type: doc['type'],
-      mediaUrl: doc['mediaUrl'],
-      postId: doc['postId'],
-      userProfileImg: doc['userProfileImg'],
-      commentData: doc['commentData'],
-      timestamp: doc['timestamp'],
+      username: doc.data()['username'],
+      userId: doc.data()['userId'],
+      type: doc.data()['type'],
+      mediaUrl: doc.data()['mediaUrl'],
+      postId: doc.data()['postId'],
+      userProfileImg: doc.data()['userProfileImg'],
+      commentData: doc.data()['commentData'],
+      timestamp: doc.data()['timestamp'],
     );
   }
 
@@ -150,7 +148,7 @@ class ActivityFeedItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 2.0),
       child: Container(
-        color: Colors.white54,
+        color: Colors.white,
         child: ListTile(
           title: GestureDetector(
             onTap: () => showProfile(context, profileId: userId),
@@ -193,7 +191,9 @@ showProfile(BuildContext context, {String profileId}) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => Profile(profileId: profileId,),
+      builder: (context) => Profile(
+        profileId: profileId,
+      ),
     ),
   );
 }

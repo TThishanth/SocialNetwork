@@ -26,7 +26,8 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
-  final TextEditingController _retypePasswordController = new TextEditingController();
+  final TextEditingController _retypePasswordController =
+      new TextEditingController();
 
   void _submitForm() {
     final isValid = _formKey.currentState.validate();
@@ -272,13 +273,17 @@ class _AuthFormState extends State<AuthForm> {
                               try {
                                 await _authentication
                                     .googleSignIn()
-                                    .whenComplete(() {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomePage(),
-                                    ),
-                                  );
+                                    .then((response) {
+                                  if (response.isNotEmpty) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.of(context).pop();
+                                  }
                                 });
                               } catch (err) {
                                 print(err);
